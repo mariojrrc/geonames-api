@@ -29,8 +29,8 @@ class CitiesResource extends AbstractResourceListener
     {
         $newCity = new City();
 
-        $newCity->setName($data->nome);
-        $newCity->setStateId($data->estadoId);
+        $newCity->setName($data->name);
+        $newCity->setStateId($data->stateId);
         $newCity->setCreatedAt(new \DateTime());
 
         $this->orm->persist($newCity);
@@ -142,8 +142,8 @@ class CitiesResource extends AbstractResourceListener
             return [];
         }
 
-        $object->setName($data->nome);
-        $object->setStateId($data->estadoId);
+        $object->setName($data->name);
+        $object->setStateId($data->stateId);
         $object->setUpdatedAt(new \DateTime());
 
         $this->orm->persist($object);

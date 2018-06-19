@@ -28,8 +28,8 @@ class StatesResource extends AbstractResourceListener
     {
         $newState = new State();
 
-        $newState->setName($data->nome);
-        $newState->setShortName($data->abreviacao);
+        $newState->setName($data->name);
+        $newState->setShortName($data->shortName);
         $newState->setCreatedAt(new \DateTime());
 
         $this->orm->persist($newState);
@@ -140,8 +140,8 @@ class StatesResource extends AbstractResourceListener
             return [];
         }
 
-        $object->setName($data->nome);
-        $object->setShortName($data->abreviacao);
+        $object->setName($data->name);
+        $object->setShortName($data->shortName);
         $object->setUpdatedAt(new \DateTime());
 
         $this->orm->persist($object);
