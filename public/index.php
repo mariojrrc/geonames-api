@@ -87,5 +87,9 @@ if (isset($appConfig['module_listener_options']['config_glob_paths'])) {
     }
 }
 
+if ($locale = getenv('locale')) {
+    \Locale::setDefault($locale);
+}
+
 // Run the application!
 Zend\Mvc\Application::init($appConfig)->run();

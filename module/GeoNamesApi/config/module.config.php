@@ -66,7 +66,7 @@ return [
                 2 => 'DELETE',
             ],
             'collection_query_whitelist' => [
-                0 => 'abreviacao',
+                0 => 'shortName',
             ],
             'page_size' => '10',
             'page_size_param' => 'page_size',
@@ -90,7 +90,7 @@ return [
                 2 => 'DELETE',
             ],
             'collection_query_whitelist' => [
-                0 => 'estadoId',
+                0 => 'stateId',
             ],
             'page_size' => '10',
             'page_size_param' => 'page_size',
@@ -238,7 +238,7 @@ return [
                         'options' => [],
                     ],
                 ],
-                'name' => 'nome',
+                'name' => 'name',
                 'field_type' => 'string',
             ],
             1 => [
@@ -272,7 +272,7 @@ return [
                         ],
                     ],
                 ],
-                'name' => 'abreviacao',
+                'name' => 'shortName',
                 'field_type' => 'string',
             ],
         ],
@@ -302,7 +302,7 @@ return [
                         'options' => [],
                     ],
                 ],
-                'name' => 'nome',
+                'name' => 'name',
                 'field_type' => 'string',
             ],
             1 => [
@@ -323,7 +323,7 @@ return [
                         'options' => [],
                     ],
                 ],
-                'name' => 'estadoId',
+                'name' => 'stateId',
                 'field_type' => 'string',
             ],
         ],

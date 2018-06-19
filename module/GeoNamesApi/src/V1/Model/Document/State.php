@@ -62,7 +62,7 @@ class State
     /**
      * @return mixed
      */
-    public function getUpdatedAt(): \Datetime
+    public function getUpdatedAt():? \Datetime
     {
         return $this->updatedAt;
     }

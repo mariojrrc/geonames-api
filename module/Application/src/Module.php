@@ -32,15 +32,15 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
         // Define locale
-        \Locale::setDefault('pt_BR');
-        if (file_exists('./vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php')) {
+        $locale = \Locale::getDefault();
+        if (\file_exists('./vendor/zendframework/zend-i18n-resources/languages/'.$locale.'/Zend_Validate.php')) {
             $translator = $e->getApplication()->getServiceManager()->get(TranslatorInterface::class);
             //Define o local onde se encontra o arquivo de tradução de mensagens
             $translator->addTranslationFile('phparray',
                 './vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php');
 
             //Define o local (você também pode definir diretamente no método acima
-            $translator->setLocale('pt_BR');
+            $translator->setLocale($locale);
             //Define a tradução padrão do Validator
             AbstractValidator::setDefaultTranslator(new Translator($translator));
         }

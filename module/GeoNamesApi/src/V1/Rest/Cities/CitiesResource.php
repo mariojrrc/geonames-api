@@ -104,10 +104,10 @@ class CitiesResource extends AbstractResourceListener
 
         return [
             'id' => $object->getId(),
-            'nome' => $object->getName(),
-            'estadoId' => $object->getStateId(),
-            'dataCriacao' => $object->getCreatedAt(),
-            'dataAlteracao' => $object->getUpdatedAt(),
+            'name' => $object->getName(),
+            'stateId' => $object->getStateId(),
+            'createdAt' => $object->getCreatedAt(),
+            'updatedAt' => $object->getUpdatedAt(),
         ];
     }
 
@@ -151,10 +151,10 @@ class CitiesResource extends AbstractResourceListener
 
         return [
             'id' => $object->getId(),
-            'nome' => $object->getName(),
-            'estadoId' => $object->getStateId(),
-            'dataCriacao' => $object->getCreatedAt(),
-            'dataAlteracao' => $object->getUpdatedAt(),
+            'name' => $object->getName(),
+            'stateId' => $object->getStateId(),
+            'createdAt' => $object->getCreatedAt(),
+            'updatedAt' => $object->getUpdatedAt(),
         ];
     }
 

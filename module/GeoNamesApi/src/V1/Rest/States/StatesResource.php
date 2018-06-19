@@ -102,10 +102,10 @@ class StatesResource extends AbstractResourceListener
         }
         return [
             'id' => $object->getId(),
-            'nome' => $object->getName(),
-            'abreviacao' => $object->getShortName(),
-            'dataCriacao' => $object->getCreatedAt(),
-            'dataAlteracao' => $object->getUpdatedAt(),
+            'name' => $object->getName(),
+            'shortName' => $object->getShortName(),
+            'createdAt' => $object->getCreatedAt(),
+            'updatedAt' => $object->getUpdatedAt(),
         ];
     }
 
@@ -149,10 +149,10 @@ class StatesResource extends AbstractResourceListener
 
         return [
             'id' => $object->getId(),
-            'nome' => $object->getName(),
-            'abreviacao' => $object->getShortName(),
-            'dataCriacao' => $object->getCreatedAt(),
-            'dataAlteracao' => $object->getUpdatedAt(),
+            'name' => $object->getName(),
+            'shortName' => $object->getShortName(),
+            'createdAt' => $object->getCreatedAt(),
+            'updatedAt' => $object->getUpdatedAt(),
         ];
     }
 
