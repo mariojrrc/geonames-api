@@ -1,0 +1,185 @@
+<?php
+
+namespace Application\Authentication;
+
+use Application\Model\ApiUserRole;
+use Application\Authentication\Identity\IdentityInterface;
+use Application\Authentication\Identity\ManagerIdentity;
+use Application\Authentication\Identity\UserDefinedIdentity;
+use Zend\Authentication\AuthenticationService as ZendAuthenticationService;
+use Zend\Http\Header\Authorization;
+use ZF\ApiProblem\ApiProblem;
+
+/**
+ * @var Identity\UserDefinedIdentity getIdentity()
+ */
+class AuthenticationService extends ZendAuthenticationService
+{
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * @var AccessControl
+     */
+    private $accessControl;
+
+    /**
+     * @var array
+     */
+    private $tokenConfig;
+
+    /**
+     * @param Authorization $header
+     * @return AuthenticationService|ApiProblem
+     */
+    public function setTokenFromAuthorizationHeader(Authorization $header)
+    {
+        // split token
+        $preg_match = preg_match('#(\w*)\s\s*(\w*)\/?(\w*)?#', $header->getFieldValue(), $matches);
+
+        // Check for matches
+        if ($preg_match !== 1) {
+            return new ApiProblem(403, 'Authorization token not found.');
+        }
+
+        // Verifica o token
+        if (strtolower($matches[1]) !== 'geonames'
+            && strtolower($matches[1]) !== 'manager') {
+            return new ApiProblem(403, 'Authorization format invalid.');
+        }
+
+        // Valida o token
+        if (!isset($matches[2]) || empty(isset($matches[2]))) {
+            return new ApiProblem(403, 'Token not set or invalid');
+        }
+
+        if (strtolower($matches[1]) === 'manager') {
+            if ($this->registerManagerToken($matches[2]) === false) {
+                return new ApiProblem(403, 'Invalid token.');
+            }
+            return $this;
+        }
+
+        // checks for ecf
+        if (!isset($matches[3]) || empty(isset($matches[3]))) {
+            $matches[3] = null;
+        }
+
+        // Validate the token
+        if ($this->registerToken($matches[2], $matches[3]) === false) {
+            return new ApiProblem(403, 'Invalid token.');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->getStorage()->read()->getToken();
+    }
+
+    /**
+     * @param string $token
+     * @param string $ecfCode
+     * @return IdentityInterface|bool|ApiProblem
+     */
+    public function registerToken(string $token)
+    {
+        // Checks if the token is valid
+        $tokenConfig = $this->getTokenConfig();
+
+        if (!isset($tokenConfig[$token])) {
+            return false;
+        }
+
+        // @todo colocar em um factory?!
+        $apiUser = null;
+        if (isset($tokenConfig[$token]['role'])) {
+            if ($tokenConfig[$token]['role'] === ApiUserRole::USER_DEFINED) {
+                $apiUser = new UserDefinedIdentity();
+                $apiUser->setUser($tokenConfig[$token], $token);
+            }
+        }
+
+        if (empty($apiUser)) {
+            throw new \RuntimeException("Invalid user $token");
+        }
+
+        $this->getStorage()->write($apiUser);
+        $this->getAccessControl()->setApiUser($apiUser->getApiUser());
+
+        $this->token = $token;
+
+        // Grava o usuário no access control
+        if ($apiUser instanceof UserDefinedIdentity) {
+            $setUsuarioByToken = $this->getAccessControl()->setUsuarioForApiUser($apiUser->getApiUser());
+            if ($setUsuarioByToken instanceof ApiProblem) {
+                return $setUsuarioByToken;
+            }
+        }
+
+        return $apiUser;
+    }
+
+    private function getTokenConfig(): array
+    {
+        if ($this->tokenConfig === null) {
+            $configFile = 'data/token-config.php';
+            if (!file_exists($configFile)) {
+                throw new \RuntimeException("Arquivo $configFile não encontrado.");
+            }
+            $this->tokenConfig = require $configFile;
+        }
+
+        return $this->tokenConfig;
+    }
+
+    public function setTokenConfig(array $config)
+    {
+        $this->tokenConfig = $config;
+    }
+
+    private function registerManagerToken(string $token)
+    {
+        // Checks if the token is valid
+        if (!isset($this->config['manager']) || $this->config['manager'] !== $token) {
+            return false;
+        }
+
+        // @todo colocar em um factory?!
+        $apiUser = new ManagerIdentity();
+        $apiUser->setUser([], $token);
+
+        $this->getStorage()->write($apiUser);
+
+        $this->token = $token;
+    }
+
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @param AccessControl $accessControl
+     * @return AuthenticationService
+     */
+    public function setAccessControl(AccessControl $accessControl): AuthenticationService
+    {
+        $this->accessControl = $accessControl;
+        return $this;
+    }
+
+    /**
+     * @return AccessControl
+     */
+    public function getAccessControl(): AccessControl
+    {
+        return $this->accessControl;
+    }
+}

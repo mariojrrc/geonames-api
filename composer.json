@@ -1,0 +1,82 @@
+{
+    "name": "mariojrrc/geonames-api",
+    "description": "Example of using apigility with mongodb",
+    "type": "library",
+    "license": "proprietary",
+    "keywords": [
+        "api",
+        "apigility",
+        "zf3",
+        "mongodb",
+        "geonames"
+    ],
+    "homepage": "https://github.com/mariojrrc/geonames-api",
+    "config": {
+        "process-timeout": 5000
+    },
+    "require": {
+        "php": "^7.1",
+        "ext-intl" : "*",
+	    "ext-mysqli" : "*",
+	    "ext-memcached" : "*",
+	    "ext-json" : "*",
+	    "ext-gd" : "*",
+        "zendframework/zend-component-installer": "^1.0 || ^0.5 || ^1.0.0-dev@dev",
+        "zfcampus/zf-apigility": "^1.3",
+        "zfcampus/zf-apigility-documentation": "^1.2.3",
+        "zfcampus/zf-development-mode": "^3.0",
+        "zendframework/zend-serializer": "^2.8",
+        "zendframework/zend-log": "^2.9",
+        "zendframework/zend-i18n": "^2.7",
+        "zendframework/zend-hydrator": "^2.2",
+        "zendframework/zend-console": "^2.6",
+        "zendframework/zend-mvc-i18n": "^1.0",
+        "zendframework/zend-cache": "^2.7.1",
+        "zendframework/zend-modulemanager": "<2.8",
+        "realejo/zf3-base":"^2.1.6",
+        "alcaeus/mongo-php-adapter": "^1.1",
+        "doctrine/mongodb": "^1.6",
+        "doctrine/mongodb-odm": "^1.2",
+        "doctrine/doctrine-mongo-odm-module": "^1.0"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require-dev": {
+        "zendframework/zend-developer-tools": "^1.1",
+        "zfcampus/zf-apigility-admin": "^1.5.9",
+        "zfcampus/zf-asset-manager": "^1.1.1",
+        "zfcampus/zf-composer-autoloading": "^1.0",
+        "zfcampus/zf-deploy": "^1.2",
+        "zfcampus/zf-development-mode": "^3.0",
+        "zfcampus/zf-apigility-documentation-apiblueprint": "^1.2",
+        "squizlabs/php_codesniffer": "^2.8",
+        "phpunit/phpunit": "^6.1",
+        "zendframework/zend-test": "^3.1",
+        "phpunit/dbunit": "^3.0",
+        "phpunit/php-invoker": "^1.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "module/Application/src/",
+            "GeoNamesApi\\": "module/GeoNamesApi/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApplicationTest\\": "module/Application/test/",
+            "GeoNamesApiTest\\": "module/GeoNamesApi/test/"
+        },
+        "files": [
+            "src/Apigility/constants.php"
+        ]
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "dev-disable": "zf-development-mode disable",
+        "dev-enable": "zf-development-mode enable",
+        "dev-status": "zf-development-mode status",
+        "test": "vendor/bin/phpunit"
+    }
+}

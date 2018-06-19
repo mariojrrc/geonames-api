@@ -1,0 +1,8 @@
+/.settings/
+/.buildpath
+/.project
+.DS_Store
+/vendor/
+/deployment.properties
+/deployment.xml
+*.idea/

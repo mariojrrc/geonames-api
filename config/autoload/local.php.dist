@@ -1,0 +1,21 @@
+<?php
+return [
+    'db' => [
+        'database' => '',
+        'hostname' => '',
+        'username' => '',
+        'password' => '',
+        //config ZF1
+        'dbname' => '',
+        'host' => '',
+    ],
+    'view_manager' => [
+        'display_exceptions' => true,
+    ],
+    'realejo' => [
+        'api' => [
+            'manager' => 'token for managing the api configuration'
+        ]
+    ]
+];
+
