@@ -1,7 +1,8 @@
 GeoNames API Example
 =================================================
+[![Build Status](https://semaphoreci.com/api/v1/mariojrrc/geonames-api/branches/master/badge.svg)](https://semaphoreci.com/mariojrrc/geonames-api)
 
-Este projeto contém a api de exemplo escrita em PHP utilizando Zend Apigility e Mongo DB.
+Este projeto contém uma API REST de exemplo escrita em PHP utilizando Zend Apigility e Mongo DB.
 Possui basicamente dois endpoints com CRUD:
 
 - /cities
