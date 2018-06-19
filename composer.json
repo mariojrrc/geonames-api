@@ -17,8 +17,6 @@
     "require": {
         "php": "^7.1",
         "ext-intl" : "*",
-	    "ext-mysqli" : "*",
-	    "ext-memcached" : "*",
 	    "ext-json" : "*",
 	    "ext-gd" : "*",
         "zendframework/zend-component-installer": "^1.0 || ^0.5 || ^1.0.0-dev@dev",
