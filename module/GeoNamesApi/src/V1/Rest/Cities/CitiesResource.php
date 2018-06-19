@@ -79,6 +79,7 @@ class CitiesResource extends AbstractResourceListener
      *
      * @param  array $params
      * @return ApiProblem|mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function fetchAll($params = [])
     {

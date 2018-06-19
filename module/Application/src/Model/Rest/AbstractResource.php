@@ -2,23 +2,16 @@
 
 namespace Application\Model\Rest;
 
-use Application\Authentication\AccessControl;
 use Realejo\Stdlib\ArrayObject;
 use Realejo\MvcUtils\ServiceLocatorTrait;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Paginator\Paginator;
-use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
 
 abstract class AbstractResource extends AbstractResourceListener
 {
 
     use ServiceLocatorTrait;
-
-    /**
-     * @var AccessControl
-     */
-    /*protected $accessControl;*/
 
     /**
      * @var Paginator

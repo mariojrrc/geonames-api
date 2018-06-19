@@ -3,14 +3,14 @@
 namespace Application\Authentication\Identity;
 
 
-use Api\ApiUserRole;
-use Api\ApiUserStatus;
+use Application\Model\ApiUserRole;
+use Application\Model\ApiUserStatus;
 
 class ManagerIdentity extends AbstractIdentity
 {
     protected static $identity = 'manager';
 
-    public function setUser(array $apiUser, string $token):void
+    public function setUser(array $apiUser, string $token): void
     {
         $this->apiUser = [
             'name' => 'API Manager',

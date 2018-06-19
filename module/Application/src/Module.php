@@ -7,7 +7,6 @@
 namespace Application;
 
 use Application\Authentication\AuthenticationService;
-use Application\Model\Validate;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;

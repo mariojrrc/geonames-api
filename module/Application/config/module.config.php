@@ -47,9 +47,6 @@ return [
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
-        'factories' => [
-            Authentication\AccessControl::class => Authentication\AccessControlFactory::class
-        ]
     ],
     'view_manager' => [
         'display_not_found_reason' => true,

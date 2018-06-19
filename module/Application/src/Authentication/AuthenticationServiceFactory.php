@@ -30,7 +30,6 @@ class AuthenticationServiceFactory implements FactoryInterface
 
         $service = new AuthenticationService($container->get(NonPersistent::class));
         $service->setConfig($config['backend']['api']);
-        $service->setAccessControl($container->get(AccessControl::class));
         return $service;
     }
 

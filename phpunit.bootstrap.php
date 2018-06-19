@@ -1,11 +1,4 @@
 <?php
-/**
- * Bootstrap do PHPUnit para definir as constantes das bibliotecas da Realejo
- *
- * isso é altamente errado fora de padrão e fiz essa gambiarra até a gente resolver
- *
- * @author Rodrigo
- */
 // Não é a melhor forma de lidar com isso.
 // Mas é a mais segura sem haver disciplina na hora de fazer os deploys
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'testing');

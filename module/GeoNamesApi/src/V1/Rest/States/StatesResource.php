@@ -48,6 +48,7 @@ class StatesResource extends AbstractResourceListener
      *
      * @param  mixed $data
      * @return ApiProblem|mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function deleteList($data)
     {
@@ -79,6 +80,7 @@ class StatesResource extends AbstractResourceListener
      *
      * @param  array $params
      * @return ApiProblem|mixed
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function fetchAll($params = [])
     {

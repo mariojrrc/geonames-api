@@ -2,7 +2,6 @@
 
 namespace Application\Authentication;
 
-use Application\Model\ApiUserRole;
 use Application\Authentication\Identity\IdentityInterface;
 use Application\Authentication\Identity\ManagerIdentity;
 use Application\Authentication\Identity\UserDefinedIdentity;
@@ -21,14 +20,14 @@ class AuthenticationService extends ZendAuthenticationService
     private $config;
 
     /**
-     * @var AccessControl
-     */
-    private $accessControl;
-
-    /**
      * @var array
      */
     private $tokenConfig;
+
+    /**
+     * @var string
+     */
+    private $token;
 
     /**
      * @param Authorization $header
@@ -62,13 +61,8 @@ class AuthenticationService extends ZendAuthenticationService
             return $this;
         }
 
-        // checks for ecf
-        if (!isset($matches[3]) || empty(isset($matches[3]))) {
-            $matches[3] = null;
-        }
-
         // Validate the token
-        if ($this->registerToken($matches[2], $matches[3]) === false) {
+        if ($this->registerToken($matches[2]) === false) {
             return new ApiProblem(403, 'Invalid token.');
         }
 
@@ -85,7 +79,6 @@ class AuthenticationService extends ZendAuthenticationService
 
     /**
      * @param string $token
-     * @param string $ecfCode
      * @return IdentityInterface|bool|ApiProblem
      */
     public function registerToken(string $token)
@@ -100,10 +93,8 @@ class AuthenticationService extends ZendAuthenticationService
         // @todo colocar em um factory?!
         $apiUser = null;
         if (isset($tokenConfig[$token]['role'])) {
-            if ($tokenConfig[$token]['role'] === ApiUserRole::USER_DEFINED) {
-                $apiUser = new UserDefinedIdentity();
-                $apiUser->setUser($tokenConfig[$token], $token);
-            }
+            $apiUser = new UserDefinedIdentity();
+            $apiUser->setUser($tokenConfig[$token], $token);
         }
 
         if (empty($apiUser)) {
@@ -111,17 +102,8 @@ class AuthenticationService extends ZendAuthenticationService
         }
 
         $this->getStorage()->write($apiUser);
-        $this->getAccessControl()->setApiUser($apiUser->getApiUser());
 
         $this->token = $token;
-
-        // Grava o usuário no access control
-        if ($apiUser instanceof UserDefinedIdentity) {
-            $setUsuarioByToken = $this->getAccessControl()->setUsuarioForApiUser($apiUser->getApiUser());
-            if ($setUsuarioByToken instanceof ApiProblem) {
-                return $setUsuarioByToken;
-            }
-        }
 
         return $apiUser;
     }
@@ -144,7 +126,7 @@ class AuthenticationService extends ZendAuthenticationService
         $this->tokenConfig = $config;
     }
 
-    private function registerManagerToken(string $token)
+    private function registerManagerToken(string $token): bool
     {
         // Checks if the token is valid
         if (!isset($this->config['manager']) || $this->config['manager'] !== $token) {
@@ -158,28 +140,12 @@ class AuthenticationService extends ZendAuthenticationService
         $this->getStorage()->write($apiUser);
 
         $this->token = $token;
+
+        return true;
     }
 
     public function setConfig($config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * @param AccessControl $accessControl
-     * @return AuthenticationService
-     */
-    public function setAccessControl(AccessControl $accessControl): AuthenticationService
-    {
-        $this->accessControl = $accessControl;
-        return $this;
-    }
-
-    /**
-     * @return AccessControl
-     */
-    public function getAccessControl(): AccessControl
-    {
-        return $this->accessControl;
     }
 }

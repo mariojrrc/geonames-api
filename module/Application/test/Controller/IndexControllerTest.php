@@ -40,7 +40,6 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('home');
 
-        // Ele deve ser redirecionado para o Bobs se tentar acessar a raiz da api
         $this->assertResponseStatusCode(404);
     }
 
