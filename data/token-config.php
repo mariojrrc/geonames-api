@@ -9,7 +9,7 @@ declare(strict_types=1);
  * de uma consulta a base de dados ou algo parecido.
  */
 return [
-    'b17d8756cc2990c0c897454ee4dd0e58' =>
+    'b17d8756cc299c0c897454ee4dd0e58' =>
         [
             'id_apiuser' => 1,
             'name' => 'zoox',

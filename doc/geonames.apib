@@ -1,0 +1,212 @@
+FORMAT: 1A
+HOST: https://geonames-api.com.br:443
+
+# API: Geonames
+
+Nesta api você tem acesso a cidades e estados cadastrados na base de dados.
+
+## Autorização
+
+O header deve ser no formato `Geonames token`. Note que *Geonames* faz parte do valor do header e deve ter
+um espaço entre *Geonames* e *token*.
+
+Por exemplo:
+
+```http
+Authorization: Geonames b17d8756cc299c0c897454ee4dd0e58,
+Accept: application/json
+```
+Quando uma autorização falhar será retornado um json com código `4XX` e content type `application/problem+json`.
+
+Por exemplo:
+
+```json
+{
+    "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+    "title": "Bad Request",
+    "status": 400,
+    "detail": "Token obrigatório"
+}
+```
+ou
+```json
+{
+    "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+    "title": "Forbidden",
+    "status": 403,
+    "detail": "Forbidden"
+}
+```
+ou
+
+```json
+{
+    "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+    "title": "Forbidden",
+    "status": 403,
+    "detail": "Token inválido"
+}
+```
+
+Os endpoints disponíveis neste serviço são os seguintes:
+
+# Group Cities
+## Cities Collection [/cities{?page,pageSize,stateId}]
+
++ Parameters
+ + page : 1 (optional, integer) - Paginação
+ + pageSize : 10 (optional, integer) - Tamanho de itens por página
+ + stateId : 1234 (optional, string|int) - EstadoId para busca
+
+### Listar todas as cidades [GET]
+Retorna uma lista de cidades com paginação.
+
++ Response 200 (application/json)
+
+        {
+        "_links": {
+            "self": {
+                "href": "/cities"
+           },
+            "first": {
+                "href": "/cities?page={page}"
+           },
+            "prev": {
+               "href": "/cities?page={page}"
+           },
+            "next": {
+               "href": "/cities?page={page}"
+           },
+            "last": {
+               "href": "/cities?page={page}"
+           }
+        }
+        "_embedded": {
+            "cities": [
+               {
+               "id": string //Identificador único
+                "name": string,
+                "shortName": string,
+                "stateId": integer,
+                "createdAt": isodate,
+                "updatedAt": isodate,
+               },
+               ...
+           ]
+       }
+       }
+
+
+### Criar uma nova cidade [POST /cities]
+Cria um novo cliente.
+
+É obrigatório o preenchimento dos campos
+ - Name
+ - StateId
+
++ Request (application/json)
+
+     {
+        "name": string (Required),
+        "StateId": string|integer (Required),
+     }
+
++ Response 422
+
+    {
+      "validation_messages": {
+        "name": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 100 characters long",
+          "stringLengthTooShort": "The input is less than 3 characters long"
+        },
+        "StateId": {
+          "isEmpty": "Value is required and can't be empty",
+        },
+      },
+      "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Failed Validation"
+    }
+
++ Response 201
+
+## Cities Entities [/cities/{id}]
++ Parameters
+ + id : 123 (required, integer|string) - identificador único da cidade
+
+### Recuperar uma cidade [GET]
+Retorna os dados de uma cidae.
+
+Por exemplo, a consulta abaixo irá retornar a cidade com codigo 12
+```no-highlight
+/cities/12
+```
++ Response 200 (application/json)
+
+        {
+        "_links": {
+          "self": {
+            "href": "/cities/:id"
+          }
+        }
+        "_embedded": {
+            "cities": [
+               {
+               "id": string //Identificador único
+                "name": string,
+                "shortName": string,
+                "stateId": integer,
+                "createdAt": isodate,
+                "updatedAt": isodate,
+               },
+               ...
+           ]
+       }
+       }
+
+### Atualizar uma cidade [PATCH /cities/{id}]
+Atualiza uma cidade específica.
+
++ Parameters
+    + id  : 123 (required, integer) - identificador único da cidade
+
++ Request (application/json)
+
+        {
+            "name": string (Required),
+            "stateId": string|integer (Required),
+        }
+
++ Response 422
+
+    {
+      "validation_messages": {
+        "name": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 100 characters long",
+          "stringLengthTooShort": "The input is less than 3 characters long"
+        },
+        "StateId": {
+          "isEmpty": "Value is required and can't be empty",
+        },
+      },
+      "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Failed Validation"
+    }
+
++ Response 201
+
+### Remove uma cidade [DELETE /cities/{id}]
+
++ Parameters
+    + id  : 123 (required, integer) - identificador único da cidade
+
++ Response 204
+
+### Remove todas as cidades [DELETE /cities]
+
++ Response 204

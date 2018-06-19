@@ -67,9 +67,6 @@ class Module
                 return;
             }
 
-            // TODO remover isso para fazer a validacao
-            return;
-
             /**
              * @var $authentication AuthenticationService
              */

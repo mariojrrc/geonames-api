@@ -134,7 +134,6 @@ class AuthenticationService extends ZendAuthenticationService
             return false;
         }
 
-        // @todo colocar em um factory?!
         $apiUser = new ManagerIdentity();
         $apiUser->setUser([], $token);
 
