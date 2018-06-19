@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
@@ -11,6 +12,9 @@ use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Router\Http\RouteMatch;
+use Zend\Validator\AbstractValidator;
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\Mvc\I18n\Translator;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
@@ -26,6 +30,20 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        // Define locale
+        \Locale::setDefault('pt_BR');
+        if (file_exists('./vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php')) {
+            $translator = $e->getApplication()->getServiceManager()->get(TranslatorInterface::class);
+            //Define o local onde se encontra o arquivo de tradução de mensagens
+            $translator->addTranslationFile('phparray',
+                './vendor/zendframework/zend-i18n-resources/languages/pt_BR/Zend_Validate.php');
+
+            //Define o local (você também pode definir diretamente no método acima
+            $translator->setLocale('pt_BR');
+            //Define a tradução padrão do Validator
+            AbstractValidator::setDefaultTranslator(new Translator($translator));
+        }
 
         $eventManager->attach(MvcEvent::EVENT_ROUTE, function (MvcEvent $event) {
 

@@ -1,4 +1,5 @@
-<?php // @codingStandardsIgnoreFile
+<?php
+declare(strict_types=1); // @codingStandardsIgnoreFile
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.

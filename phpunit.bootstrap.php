@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 // Não é a melhor forma de lidar com isso.
 // Mas é a mais segura sem haver disciplina na hora de fazer os deploys
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'testing');

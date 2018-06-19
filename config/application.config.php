@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 return [
     'modules' => include __DIR__ . '/modules.config.php',
     'module_listener_options' => [

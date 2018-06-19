@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace GeoNamesApi\V1\Model\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -14,16 +16,16 @@ class State
     private $id;
 
     /** @ODM\Field(type="string") */
-    private $nome;
+    private $name;
 
     /** @ODM\Field(type="string") */
-    private $abreviacao;
+    private $shortName;
 
     /** @ODM\Field(type="date") */
-    private $dataCriacao;
+    private $createdAt;
 
     /** @ODM\Field(type="date") */
-    private $dataAlteracao;
+    private $updatedAt;
 
     /**
      * @return mixed
@@ -44,64 +46,64 @@ class State
     /**
      * @return mixed
      */
-    public function getNome(): string
+    public function getName(): string
     {
-        return $this->nome;
+        return $this->name;
     }
 
     /**
-     * @param $nome
+     * @param $name
      */
-    public function setNome($nome): void
+    public function setName($name): void
     {
-        $this->nome = $nome;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDataAlteracao(): \Datetime
-    {
-        return $this->dataAlteracao;
-    }
-
-    /**
-     * @param mixed $dataAlteracao
-     */
-    public function setDataAlteracao($dataAlteracao): void
-    {
-        $this->dataAlteracao = $dataAlteracao;
+        $this->name = $name;
     }
 
     /**
      * @return mixed
      */
-    public function getDataCriacao(): \Datetime
+    public function getUpdatedAt(): \Datetime
     {
-        return $this->dataCriacao;
+        return $this->updatedAt;
     }
 
     /**
-     * @param mixed $dataCriacao
+     * @param mixed $updatedAt
      */
-    public function setDataCriacao($dataCriacao): void
+    public function setUpdatedAt($updatedAt): void
     {
-        $this->dataCriacao = $dataCriacao;
+        $this->updatedAt = $updatedAt;
     }
 
     /**
      * @return mixed
      */
-    public function getAbreviacao(): string
+    public function getCreatedAt(): \Datetime
     {
-        return $this->abreviacao;
+        return $this->createdAt;
     }
 
     /**
-     * @param mixed $abreviacao
+     * @param mixed $createdAt
      */
-    public function setAbreviacao($abreviacao): void
+    public function setCreatedAt($createdAt): void
     {
-        $this->abreviacao = $abreviacao;
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShortName(): string
+    {
+        return $this->shortName;
+    }
+
+    /**
+     * @param mixed $shortName
+     */
+    public function setShortName($shortName): void
+    {
+        $this->shortName = $shortName;
     }
 }

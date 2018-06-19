@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Este aquivo serve como base para fazer a autorização do usuário
  * detentor do token aos endpoints.

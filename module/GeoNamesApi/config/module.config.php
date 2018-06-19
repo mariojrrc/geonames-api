@@ -57,19 +57,20 @@ return [
             'collection_name' => 'states',
             'entity_http_methods' => [
                 0 => 'GET',
-                1 => 'PATCH',
-                2 => 'PUT',
-                3 => 'DELETE',
+                1 => 'PUT',
+                2 => 'DELETE',
             ],
             'collection_http_methods' => [
                 0 => 'GET',
                 1 => 'POST',
                 2 => 'DELETE',
             ],
-            'collection_query_whitelist' => [],
-            'page_size' => 25,
+            'collection_query_whitelist' => [
+                0 => 'abreviacao',
+            ],
+            'page_size' => '10',
             'page_size_param' => 'page_size',
-            'entity_class' => \GeoNamesApi\V1\Rest\States\StatesEntity::class,
+            'entity_class' => \GeoNamesApi\V1\Model\Document\State::class,
             'collection_class' => \GeoNamesApi\V1\Rest\States\StatesCollection::class,
             'service_name' => 'States',
         ],
@@ -80,18 +81,20 @@ return [
             'collection_name' => 'cities',
             'entity_http_methods' => [
                 0 => 'GET',
-                1 => 'PATCH',
-                2 => 'PUT',
-                3 => 'DELETE',
+                1 => 'PUT',
+                2 => 'DELETE',
             ],
             'collection_http_methods' => [
                 0 => 'GET',
                 1 => 'POST',
+                2 => 'DELETE',
             ],
-            'collection_query_whitelist' => [],
-            'page_size' => 25,
+            'collection_query_whitelist' => [
+                0 => 'estadoId',
+            ],
+            'page_size' => '10',
             'page_size_param' => 'page_size',
-            'entity_class' => \GeoNamesApi\V1\Rest\Cities\CitiesEntity::class,
+            'entity_class' => \GeoNamesApi\V1\Model\Document\City::class,
             'collection_class' => \GeoNamesApi\V1\Rest\Cities\CitiesCollection::class,
             'service_name' => 'Cities',
         ],
@@ -126,7 +129,7 @@ return [
     ],
     'zf-hal' => [
         'metadata_map' => [
-            \GeoNamesApi\V1\Rest\States\StatesEntity::class => [
+            'GeoNamesApi\\V1\\Rest\\States\\StatesEntity' => [
                 'entity_identifier_name' => 'id',
                 'route_name' => 'geo-names-api.rest.states',
                 'route_identifier_name' => 'states_id',
@@ -138,7 +141,7 @@ return [
                 'route_identifier_name' => 'states_id',
                 'is_collection' => true,
             ],
-            \GeoNamesApi\V1\Rest\Cities\CitiesEntity::class => [
+            'GeoNamesApi\\V1\\Rest\\Cities\\CitiesEntity' => [
                 'entity_identifier_name' => 'id',
                 'route_name' => 'geo-names-api.rest.cities',
                 'route_identifier_name' => 'cities_id',
@@ -149,6 +152,18 @@ return [
                 'route_name' => 'geo-names-api.rest.cities',
                 'route_identifier_name' => 'cities_id',
                 'is_collection' => true,
+            ],
+            \GeoNamesApi\V1\Model\Document\State::class => [
+                'entity_identifier_name' => 'id',
+                'route_name' => 'geo-names-api.rest.states',
+                'route_identifier_name' => 'states_id',
+                'hydrator' => \DoctrineModule\Stdlib\Hydrator\DoctrineObject::class,
+            ],
+            \GeoNamesApi\V1\Model\Document\City::class => [
+                'entity_identifier_name' => 'id',
+                'route_name' => 'geo-names-api.rest.cities',
+                'route_identifier_name' => 'cities_id',
+                'hydrator' => \DoctrineModule\Stdlib\Hydrator\DoctrineObject::class,
             ],
         ],
     ],
@@ -179,11 +194,11 @@ return [
                     'DELETE' => false,
                 ],
                 'entity' => [
-                    'GET' => true,
+                    'GET' => false,
                     'POST' => false,
-                    'PUT' => true,
+                    'PUT' => false,
                     'PATCH' => true,
-                    'DELETE' => true,
+                    'DELETE' => false,
                 ],
             ],
         ],
@@ -292,7 +307,12 @@ return [
             ],
             1 => [
                 'required' => true,
-                'validators' => [],
+                'validators' => [
+                    0 => [
+                        'name' => \Zend\Validator\NotEmpty::class,
+                        'options' => [],
+                    ],
+                ],
                 'filters' => [
                     0 => [
                         'name' => \Zend\Filter\StringTrim::class,

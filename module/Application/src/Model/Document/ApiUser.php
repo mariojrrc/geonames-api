@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Application\Model\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;

@@ -1,16 +1,10 @@
 <?php
+declare(strict_types=1);
 
 use Zend\Db\Adapter\AdapterServiceFactory;
 use Application\Authentication\AuthenticationServiceFactory;
 
 return [
-    'zf-mvc-auth' => [
-        'authentication' => [
-            'map' => [
-                'Teste\\V1' => 'auth',
-            ],
-        ],
-    ],
     'router' => [
         'routes' => [
             'oauth' => [
@@ -26,17 +20,6 @@ return [
         'api' => [
             'manager' => 'Insert the manager token here'
         ]
-    ],
-    'db' => [
-        'charset' => 'utf8',
-        'database' => 'test',
-        'driver' => 'Mysqli',
-        'hostname' => '',
-        'username' => '',
-        'password' => '',
-        'options' => [
-            'buffer_results' => true,
-        ],
     ],
     'service_manager' => [
         'factories' => [

@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
+
 namespace GeoNamesApi\V1\Rest\States;
 
 use GeoNamesApi\V1\Model\Document\State;
+use Zend\Http\Response;
+use Zend\Paginator\Adapter\ArrayAdapter;
 use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
 use Doctrine\ODM\MongoDB\DocumentManager as ORM;
 
@@ -12,6 +17,7 @@ class StatesResource extends AbstractResourceListener
      * @var ORM
      */
     private $orm;
+
     /**
      * Create a resource
      *
@@ -22,14 +28,17 @@ class StatesResource extends AbstractResourceListener
     {
         $newState = new State();
 
-        $newState->setNome($data->nome);
-        $newState->setAbreviacao($data->abreviacao);
-        $newState->setDataCriacao(new \DateTime());
+        $newState->setName($data->nome);
+        $newState->setShortName($data->abreviacao);
+        $newState->setCreatedAt(new \DateTime());
 
         $this->orm->persist($newState);
         $this->orm->flush();
 
-        return [];
+        // Returns default created response
+        $response = new Response();
+        $response->setStatusCode(201);
+        return $response;
     }
 
     /**
@@ -40,7 +49,22 @@ class StatesResource extends AbstractResourceListener
      */
     public function delete($id)
     {
-        return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
+        /**
+         * @var State $object
+         */
+        $object = $this->orm->find(State::class, $id);
+        if (empty($object)) {
+            return new ApiProblemResponse(new ApiProblem(422, 'Entity not found.'));
+        }
+
+        $this->orm->remove($object);
+        $this->orm->flush();
+
+        // Returns default deleted response
+        $response = new Response();
+        $response->setStatusCode(204);
+
+        return $response;
     }
 
     /**
@@ -52,7 +76,13 @@ class StatesResource extends AbstractResourceListener
      */
     public function deleteList($data)
     {
-        return $this->orm->getDocumentCollection(State::class)->deleteIndexes();
+        $this->orm->getDocumentCollection(State::class)->remove([]);
+
+        // Returns default deleted response
+        $response = new Response();
+        $response->setStatusCode(204);
+
+        return $response;
     }
 
     /**
@@ -63,15 +93,19 @@ class StatesResource extends AbstractResourceListener
      */
     public function fetch($id)
     {
+        /**
+         * @var State $object
+         */
         $object = $this->orm->find(State::class, $id);
         if (empty($object)) {
             return [];
         }
         return [
-            'nome' => $object->getNome(),
-            'abreviacao' => $object->getAbreviacao(),
-            'dataCriacao' => $object->getDataCriacao(),
-            'cidades' => $object->getCities(),
+            'id' => $object->getId(),
+            'nome' => $object->getName(),
+            'abreviacao' => $object->getShortName(),
+            'dataCriacao' => $object->getCreatedAt(),
+            'dataAlteracao' => $object->getUpdatedAt(),
         ];
     }
 
@@ -84,41 +118,9 @@ class StatesResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {
-        return $this->orm->getDocumentCollection(State::class)->find();
-    }
+        $states = $this->orm->getDocumentCollection(State::class)->find($params->toArray());
 
-    /**
-     * Patch (partial in-place update) a resource
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function patch($id, $data)
-    {
-        return new ApiProblem(405, 'The PATCH method has not been defined for individual resources');
-    }
-
-    /**
-     * Patch (partial in-place update) a collection or members of a collection
-     *
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function patchList($data)
-    {
-        return new ApiProblem(405, 'The PATCH method has not been defined for collections');
-    }
-
-    /**
-     * Replace a collection or members of a collection
-     *
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function replaceList($data)
-    {
-        return new ApiProblem(405, 'The PUT method has not been defined for collections');
+        return new StatesCollection(new ArrayAdapter($states->toArray()));
     }
 
     /**
@@ -130,7 +132,28 @@ class StatesResource extends AbstractResourceListener
      */
     public function update($id, $data)
     {
-        return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
+        /**
+         * @var State $object
+         */
+        $object = $this->orm->find(State::class, $id);
+        if (empty($object)) {
+            return [];
+        }
+
+        $object->setName($data->nome);
+        $object->setShortName($data->abreviacao);
+        $object->setUpdatedAt(new \DateTime());
+
+        $this->orm->persist($object);
+        $this->orm->flush();
+
+        return [
+            'id' => $object->getId(),
+            'nome' => $object->getName(),
+            'abreviacao' => $object->getShortName(),
+            'dataCriacao' => $object->getCreatedAt(),
+            'dataAlteracao' => $object->getUpdatedAt(),
+        ];
     }
 
     public function setOrm($orm)

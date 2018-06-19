@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace GeoNamesApi\V1\Model\Document;
 
@@ -15,16 +16,16 @@ class City
     private $id;
 
     /** @ODM\Field(type="string") */
-    private $nome;
+    private $name;
 
     /** @ODM\Field(type="string") */
-    private $estadoId;
+    private $stateId;
 
     /** @ODM\Field(type="date") */
-    private $dataCriacao;
+    private $createdAt;
 
     /** @ODM\Field(type="date") */
-    private $dataAlteracao;
+    private $updatedAt;
 
     /**
      * @return mixed
@@ -45,64 +46,64 @@ class City
     /**
      * @return mixed
      */
-    public function getNome(): string
+    public function getName(): string
     {
-        return $this->nome;
+        return $this->name;
     }
 
     /**
-     * @param $nome
+     * @param $name
      */
-    public function setNome(string $nome)
+    public function setName(string $name)
     {
-        $this->nome = $nome;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDataAlteracao(): \datetime
-    {
-        return $this->dataAlteracao;
-    }
-
-    /**
-     * @param mixed $dataAlteracao
-     */
-    public function setDataAlteracao($dataAlteracao): void
-    {
-        $this->dataAlteracao = $dataAlteracao;
+        $this->name = $name;
     }
 
     /**
      * @return mixed
      */
-    public function getDataCriacao(): \Datetime
+    public function getStateId()
     {
-        return $this->dataCriacao;
+        return $this->stateId;
     }
 
     /**
-     * @param mixed $dataCriacao
+     * @param mixed $stateId
      */
-    public function setDataCriacao($dataCriacao): void
+    public function setStateId($stateId): void
     {
-        $this->dataCriacao = $dataCriacao;
+        $this->stateId = $stateId;
     }
 
     /**
      * @return mixed
      */
-    public function getEstadoId()
+    public function getUpdatedAt():? \datetime
     {
-        return $this->estadoId;
+        return $this->updatedAt;
     }
 
     /**
-     * @param mixed $estadoId
+     * @param mixed $updatedAt
      */
-    public function setEstadoId($estadoId): void
+    public function setUpdatedAt(\Datetime $updatedAt): void
     {
-        $this->estadoId = $estadoId;
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt(): \Datetime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

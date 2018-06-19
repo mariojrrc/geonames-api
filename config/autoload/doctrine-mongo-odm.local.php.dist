@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+
+use Doctrine\ODM\MongoDB\Configuration;
+
+return array(
+    'doctrine' => [
+        'connection' => [
+            'odm_default' => [
+                'server'           => '10.5.0.6',
+                'port'             => '27017',
+                'user'             => 'root',
+                'password'         => 'example',
+            ],
+        ],
+
+        'configuration' => [
+            'odm_default' => [
+                'metadata_cache'     => 'array',
+
+                'driver'             => 'odm_default',
+
+                'generate_proxies'   => true,
+                'proxy_dir'          => 'data/DoctrineMongoODMModule/Proxy',
+                'proxy_namespace'    => 'DoctrineMongoODMModule\Proxy',
+
+                'generate_hydrators' => true,
+                'hydrator_dir'       => 'data/DoctrineMongoODMModule/Hydrator',
+                'hydrator_namespace' => 'DoctrineMongoODMModule\Hydrator',
+
+                'generate_persistent_collections' => Configuration::AUTOGENERATE_ALWAYS,
+                'persistent_collection_dir' => 'data/DoctrineMongoODMModule/PersistentCollection',
+                'persistent_collection_namespace' => 'DoctrineMongoODMModule\PersistentCollection',
+                'persistent_collection_factory' => null,
+                'persistent_collection_generator' => null,
+
+                'default_db'         => null,
+
+                'filters'            => [],  // array('filterName' => 'BSON\Filter\Class'),
+
+                'logger'             => null // 'DoctrineMongoODMModule\Logging\DebugStack'
+            ]
+        ],
+
+        'driver' => [
+            'odm_default' => [
+                'drivers' => array()
+            ]
+        ],
+
+        'documentmanager' => [
+            'odm_default' => [
+                'connection'    => 'odm_default',
+                'configuration' => 'odm_default',
+                'eventmanager' => 'odm_default'
+            ]
+        ],
+
+        'eventmanager' => [
+            'odm_default' => [
+                'subscribers' => []
+            ]
+        ],
+    ],
+);

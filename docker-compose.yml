@@ -10,6 +10,9 @@ services:
      - .:/var/www
     depends_on:
        - mongo
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
 
   mongo:
     image: mongo
@@ -21,3 +24,13 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16

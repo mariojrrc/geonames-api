@@ -1,13 +1,18 @@
 <?php
+declare(strict_types=1);
 return [
+    'statuslib' => [
+        'array_mapper_path' => 'data/statuslib.php',
+    ],
+    'zf-mvc-auth' => [
+        'authentication' => [
+            'adapters' => [],
+        ],
+    ],
     'db' => [
-        'database' => '',
-        'hostname' => '',
+        'hostname' => '127.0.0.1',
         'username' => '',
         'password' => '',
-        //config ZF1
-        'dbname' => '',
-        'host' => '',
     ],
     'view_manager' => [
         'display_exceptions' => true,
