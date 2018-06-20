@@ -1,8 +1,8 @@
 {
     "name": "mariojrrc/geonames-api",
     "description": "Example of using apigility with mongodb",
-    "type": "library",
-    "license": "proprietary",
+    "type": "project",
+    "license": "BSD-3-Clause",
     "keywords": [
         "api",
         "apigility",
@@ -17,6 +17,9 @@
     "require": {
         "php": "^7.1",
         "ext-intl" : "*",
+        "ext-mongodb" : "*",
+        "ext-memcached" : "*",
+        "ext-pcntl" : "*",
 	    "ext-json" : "*",
 	    "ext-gd" : "*",
         "zendframework/zend-component-installer": "^1.0 || ^0.5 || ^1.0.0-dev@dev",

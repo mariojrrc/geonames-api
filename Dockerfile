@@ -64,4 +64,4 @@ WORKDIR /var/www
 
 COPY composer.json ./
 COPY composer.lock ./
-RUN composer install --no-scripts --no-autoloader
+#RUN composer install --no-scripts --no-autoloader

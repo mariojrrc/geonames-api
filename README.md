@@ -17,8 +17,9 @@ a notação do ApiBluePrint e é gerada utilizando o Aglio.
 ## Executando o projeto
     1 - Copie ou renomeie o arquivo `config/autoload/doctrine-mongo-odm.local.php.dist`
     2 - Execute `docker-compose up`
-    3 - Abra o navegador ou Postman no endereço `0.0.0.0:8080/cities`
-    3 - Caso não tenha o docker, é necessário ajustar as configurações do mongo no arquivo acima
+    3 - Em seguida execute `docker exec -it geonames_apigility composer install`
+    4 - Abra o navegador ou Postman no endereço `0.0.0.0:8080/cities`
+    5 - Caso não tenha o docker é necessário ajustar as configurações do mongo no arquivo acima
 
 ## EXTRA - Instalação Aglio
 Instale globalmente via NPM. É necessário ter o Node.js instalado.

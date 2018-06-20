@@ -1,6 +1,7 @@
 version: '3'
 services:
   apigility:
+    container_name: geonames_apigility
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,6 +16,7 @@ services:
         ipv4_address: 10.5.0.5
 
   mongo:
+    container_name: geonames_mongodb
     image: mongo
     restart: always
     ports:
