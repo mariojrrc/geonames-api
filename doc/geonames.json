@@ -1,0 +1,318 @@
+{
+  "info": {
+    "description": "Nesta api você tem acesso a cidades e estados cadastrados na base de dados.\n\n## Autorização\n\nO header deve ser no formato `Geonames token`. Note que *Geonames* faz parte do valor do header e deve ter\num espaço entre *Geonames* e *token*.\n\nPor exemplo:\n\n```http\nAuthorization: Geonames b17d8756cc299c0c897454ee4dd0e58,\nAccept: application/json\n```\n\nQuando uma autorização falhar será retornado um json com código `4XX` e content type `application/problem+json`.\n\nPor exemplo:\n\n```json\n{\n    \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n    \"title\": \"Bad Request\",\n    \"status\": 400,\n    \"detail\": \"Token obrigatório\"\n}\n```\n\nou\n\n```json\n{\n    \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n    \"title\": \"Forbidden\",\n    \"status\": 403,\n    \"detail\": \"Forbidden\"\n}\n```\n\nou\n\n```json\n{\n    \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n    \"title\": \"Forbidden\",\n    \"status\": 403,\n    \"detail\": \"Token inválido\"\n}\n```\n\nOs endpoints disponíveis neste serviço são os seguintes:",
+    "title": "API: Geonames",
+    "version": ""
+  },
+  "paths": {
+    "/cities": {
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "",
+        "summary": "Remove todas as cidades"
+      },
+      "get": {
+        "parameters": [
+          {
+            "description": "Paginação",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Tamanho de itens por página",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "EstadoId para busca",
+            "in": "query",
+            "name": "stateId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "Retorna uma lista de cidades com paginação.",
+        "summary": "Listar todas as cidades"
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "Cria um nova cidade.\n\nÉ obrigatório o preenchimento dos campos\n\n- Name\n\n- StateId",
+        "summary": "Criar uma nova cidade"
+      }
+    },
+    "/cities/{id}": {
+      "delete": {
+        "parameters": [
+          {
+            "description": "identificador único da cidade",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "",
+        "summary": "Remove uma cidade"
+      },
+      "get": {
+        "parameters": [
+          {
+            "description": "identificador único da cidade",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "Retorna os dados de uma cidade.\n\nPor exemplo, a consulta abaixo irá retornar a cidade com codigo 12\n\n```no-highlight\n/cities/12\n```",
+        "summary": "Recuperar uma cidade"
+      },
+      "patch": {
+        "parameters": [
+          {
+            "description": "identificador único da cidade",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "cities"
+        ],
+        "description": "Atualiza uma cidade específica.",
+        "summary": "Atualizar uma cidade"
+      }
+    },
+    "/states": {
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "",
+        "summary": "Remove todos os estados"
+      },
+      "get": {
+        "parameters": [
+          {
+            "description": "Paginação",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Tamanho de itens por página",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "Retorna uma lista de estados com paginação.",
+        "summary": "Listar todas os estados"
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "Cria um novo estado.\n\nÉ obrigatório o preenchimento dos campos\n\n- Name\n\n- ShortName",
+        "summary": "Criar uma nova estado"
+      }
+    },
+    "/states/{id}": {
+      "delete": {
+        "parameters": [
+          {
+            "description": "identificador único do estado",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "",
+        "summary": "Remove um estado"
+      },
+      "get": {
+        "parameters": [
+          {
+            "description": "identificador único do estado",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "Retorna os dados de um estado.\n\nPor exemplo, a consulta abaixo irá retornar o estado com código 12\n\n```no-highlight\n/states/12\n```",
+        "summary": "Recuperar uma estado"
+      },
+      "patch": {
+        "parameters": [
+          {
+            "description": "identificador único do estado",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {}
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "States"
+        ],
+        "description": "Atualiza um estado específica.",
+        "summary": "Atualizar uma estado"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cities_Collection": {},
+      "Cities_Entities": {},
+      "States_Collection": {},
+      "States_Entities": {}
+    }
+  },
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://geonames-api.com.br:443/"
+    }
+  ]
+}

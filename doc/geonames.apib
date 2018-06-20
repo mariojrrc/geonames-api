@@ -50,7 +50,7 @@ ou
 
 Os endpoints disponíveis neste serviço são os seguintes:
 
-# Group Cities
+# Group cities
 ## Cities Collection [/cities{?page,pageSize,stateId}]
 
 + Parameters
@@ -86,7 +86,6 @@ Retorna uma lista de cidades com paginação.
                {
                "id": string //Identificador único
                 "name": string,
-                "shortName": string,
                 "stateId": integer,
                 "createdAt": isodate,
                 "updatedAt": isodate,
@@ -98,7 +97,7 @@ Retorna uma lista de cidades com paginação.
 
 
 ### Criar uma nova cidade [POST /cities]
-Cria um novo cliente.
+Cria um nova cidade.
 
 É obrigatório o preenchimento dos campos
  - Name
@@ -132,12 +131,16 @@ Cria um novo cliente.
 
 + Response 201
 
+### Remove todas as cidades [DELETE /cities]
+
++ Response 204
+
 ## Cities Entities [/cities/{id}]
 + Parameters
  + id : 123 (required, integer|string) - identificador único da cidade
 
 ### Recuperar uma cidade [GET]
-Retorna os dados de uma cidae.
+Retorna os dados de uma cidade.
 
 Por exemplo, a consulta abaixo irá retornar a cidade com codigo 12
 ```no-highlight
@@ -146,25 +149,21 @@ Por exemplo, a consulta abaixo irá retornar a cidade com codigo 12
 + Response 200 (application/json)
 
         {
-        "_links": {
-          "self": {
-            "href": "/cities/:id"
-          }
-        }
-        "_embedded": {
-            "cities": [
-               {
-               "id": string //Identificador único
+            "_links": {
+                "self": {
+                    "href": "/cities/:id"
+                }
+            },
+        
+            {
+                "id": string //Identificador único
                 "name": string,
-                "shortName": string,
                 "stateId": integer,
                 "createdAt": isodate,
                 "updatedAt": isodate,
-               },
-               ...
-           ]
-       }
-       }
+            }
+        }
+               
 
 ### Atualizar uma cidade [PATCH /cities/{id}]
 Atualiza uma cidade específica.
@@ -207,6 +206,160 @@ Atualiza uma cidade específica.
 
 + Response 204
 
-### Remove todas as cidades [DELETE /cities]
+# Group States
+## States Collection [/states{?page,pageSize}]
+
++ Parameters
+ + page : 1 (optional, integer) - Paginação
+ + pageSize : 10 (optional, integer) - Tamanho de itens por página
+
+### Listar todas os estados [GET]
+Retorna uma lista de estados com paginação.
+
++ Response 200 (application/json)
+
+        {
+        "_links": {
+            "self": {
+                "href": "/states"
+           },
+            "first": {
+                "href": "/states?page={page}"
+           },
+            "prev": {
+               "href": "/states?page={page}"
+           },
+            "next": {
+               "href": "/states?page={page}"
+           },
+            "last": {
+               "href": "/states?page={page}"
+           }
+        }
+        "_embedded": {
+            "states": [
+               {
+               "id": string //Identificador único
+                "name": string,
+                "shortName": string,
+                "createdAt": isodate,
+                "updatedAt": isodate,
+               },
+               ...
+           ]
+       }
+       }
+
+
+### Criar uma nova estado [POST /states]
+Cria um novo estado.
+
+É obrigatório o preenchimento dos campos
+ - Name
+ - ShortName
+
++ Request (application/json)
+
+     {
+        "name": string (Required),
+        "shortName": string (Required),
+     }
+
++ Response 422
+
+    {
+      "validation_messages": {
+        "name": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 100 characters long",
+          "stringLengthTooShort": "The input is less than 3 characters long"
+        },
+        "shortName": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 2 characters long",
+          "stringLengthTooShort": "The input is less than 2 characters long"
+        },
+      },
+      "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Failed Validation"
+    }
+
++ Response 201
+
+### Remove todos os estados [DELETE /states]
+
++ Response 204
+
+## States Entities [/states/{id}]
++ Parameters
+ + id : 123 (required, integer|string) - identificador único do estado
+
+### Recuperar uma estado [GET]
+Retorna os dados de um estado.
+
+Por exemplo, a consulta abaixo irá retornar o estado com código 12
+```no-highlight
+/states/12
+```
++ Response 200 (application/json)
+
+        {
+            "_links": {
+                "self": {
+                    "href": "/states/:id"
+                }
+            },
+        
+            {
+                "id": string //Identificador único
+                "name": string,
+                "shortName": string,
+                "createdAt": isodate,
+                "updatedAt": isodate,
+            }
+        }
+
+### Atualizar uma estado [PATCH /states/{id}]
+Atualiza um estado específica.
+
++ Parameters
+    + id  : 123 (required, integer) - identificador único do estado
+
++ Request (application/json)
+
+        {
+            "name": string (Required),
+            "shortName": string (Required),
+        }
+
++ Response 422
+
+    {
+      "validation_messages": {
+        "name": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 100 characters long",
+          "stringLengthTooShort": "The input is less than 3 characters long"
+        },
+        "shortName": {
+          "isEmpty": "Value is required and can't be empty",
+          "stringLengthTooLong": "The input is more than 2 characters long",
+          "stringLengthTooShort": "The input is less than 2 characters long"
+        },
+      },
+      "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html",
+      "title": "Unprocessable Entity",
+      "status": 422,
+      "detail": "Failed Validation"
+    }
+
++ Response 201
+
+### Remove um estado [DELETE /states/{id}]
+
++ Parameters
+    + id  : 123 (required, integer) - identificador único do estado
 
 + Response 204
