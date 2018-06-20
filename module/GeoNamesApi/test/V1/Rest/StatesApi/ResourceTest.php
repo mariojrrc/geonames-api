@@ -20,7 +20,7 @@ class ResourceTest extends AbstractHttpControllerTestCase
         $response = Json::decode($this->getResponse()->getContent(), Json::TYPE_ARRAY);
         $this->assertEquals('Failed Validation', $response['detail']);
 
-        // Validação not empty
+        // Not empty validation
         foreach ([
                      'name',
                      'shortName',
@@ -50,9 +50,59 @@ class ResourceTest extends AbstractHttpControllerTestCase
         $this->assertControllerName('GeoNamesApi\\V1\\Rest\\States\\Controller');
         $this->assertMatchedRouteName('geo-names-api.rest.states');
 
-        $this->markTestIncomplete('Precisa instalar o mongo local para testar');
         $this->assertResponseStatusCode(201);
         $this->assertEquals('', $this->getResponse()->getContent());
+    }
+
+    public function testGetStatesSuccess()
+    {
+        // Creates two states
+        $samples = [
+            [
+                'name' => 'Rio de Janeiro',
+                'shortName' => 'RJ',
+            ],
+            [
+                'name' => 'São Paulo',
+                'shortName' => 'SP',
+            ],
+        ];
+
+        foreach ($samples as $state) {
+            $this->resetApplication();
+            $this->getRequest()->setContent(Json::encode($state));
+            $this->getRequest()->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+            $this->dispatch('/states', 'POST');
+            $this->assertControllerName('GeoNamesApi\\V1\\Rest\\States\\Controller');
+            $this->assertMatchedRouteName('geo-names-api.rest.states');
+            $this->assertResponseStatusCode(201);
+            $this->assertEquals('', $this->getResponse()->getContent());
+        }
+
+        // List all states
+        $this->resetApplication();
+        $this->getRequest()->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        $this->dispatch('/states', 'GET');
+        $this->assertControllerName('GeoNamesApi\\V1\\Rest\\States\\Controller');
+        $this->assertMatchedRouteName('geo-names-api.rest.states');
+        $this->assertResponseStatusCode(200);
+
+        $response = Json::decode($this->getResponse()->getContent(), \JSON_OBJECT_AS_ARRAY);
+        $this->assertArrayHasKey('_embedded', $response);
+        $this->assertArrayHasKey('states', $response['_embedded']);
+        $states = $response['_embedded']['states'];
+
+        $this->assertNotEmpty($states);
+        foreach ($states as $state) {
+            $this->assertArrayHasKey('_id', $state);
+            $this->assertNotEmpty( $state['_id']);
+            $this->assertArrayHasKey('name', $state);
+            $this->assertNotEmpty( $state['name']);
+            $this->assertArrayHasKey('shortName', $state);
+            $this->assertNotEmpty( $state['shortName']);
+            $this->assertArrayHasKey('createdAt', $state);
+            $this->assertNotEmpty( $state['createdAt']);
+        }
     }
 
 
@@ -89,7 +139,6 @@ class ResourceTest extends AbstractHttpControllerTestCase
 
         parent::setUp();
     }
-
 
     protected function assertValidationMessage($response, $key, $errorKey, $errorMessage = null)
     {
