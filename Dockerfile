@@ -23,6 +23,11 @@
 #
 FROM php:7.2-apache
 
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \
+ && sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list \
+ && sed -i '/buster-updates/d' /etc/apt/sources.list \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+
 RUN apt-get update \
  && apt-get install -y libfreetype6-dev \
          libjpeg62-turbo-dev \
@@ -31,7 +36,7 @@ RUN apt-get update \
  	     libmemcached-dev \
  	     libicu-dev \
          libpq-dev \
-         git zlib1g-dev zip unzip libxml2-dev curl libcurl3 libcurl3-dev zlib1g-dev g++ \
+         git zlib1g-dev zip unzip libxml2-dev curl libcurl4 libcurl4-openssl-dev zlib1g-dev g++ \
  && docker-php-ext-install zip bcmath pcntl \
  && docker-php-ext-configure intl && docker-php-ext-install mysqli intl zip soap curl json \
  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
@@ -50,7 +55,7 @@ RUN apt-get update && apt-get install -y \
     mkdir -p /usr/local/openssl/lib/ && \
     ln -s /usr/lib/x86_64-linux-gnu/libssl.a /usr/local/openssl/lib/libssl.a && \
     ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/local/openssl/lib
-RUN pecl install mongodb
+RUN pecl install mongodb-1.15.3
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
 
 RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
