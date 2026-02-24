@@ -4,7 +4,7 @@
 
 ### Project Overview
 
-GeoNames API — a PHP REST API built on Zend Framework Apigility with MongoDB. Two main endpoints: `/cities` and `/states` (CRUD). Runs in Docker (PHP 7.2 + Apache + MongoDB).
+GeoNames API — a REST API for geographic data (cities and states) built with **Laravel 12** (PHP 8.4) and **MongoDB**. Runs in Docker.
 
 ### Starting Services
 
@@ -19,56 +19,52 @@ sleep 3
 cd /workspace && sudo docker compose up -d
 ```
 
-After containers are running, install dependencies inside the apigility container:
+After containers start, install dependencies:
 ```bash
-sudo docker exec geonames_apigility composer install --no-interaction --no-plugins --ignore-platform-req=composer-plugin-api --ignore-platform-req=ext-memcached
+sudo docker exec geonames_app composer install --no-interaction
 ```
 
-The API will be available at `http://localhost:8080`.
+API available at `http://localhost:8080/api/`.
 
-### Dockerfile Fixes (already applied)
+### Endpoints
 
-The original Dockerfile required three fixes for modern environments:
-1. **Debian Buster archive repos** — Buster is EOL; apt sources must point to `archive.debian.org`
-2. **libcurl3 → libcurl4** — package was renamed in Debian Buster
-3. **mongodb PECL extension** — must be pinned to `mongodb-1.15.3` (last version supporting PHP 7.2)
+- `GET/POST /api/states` — List / Create states
+- `GET/PUT/DELETE /api/states/{id}` — Show / Update / Delete a state
+- `DELETE /api/states` — Delete all states
+- `GET/POST /api/cities` — List / Create cities
+- `GET/PUT/DELETE /api/cities/{id}` — Show / Update / Delete a city
+- `DELETE /api/cities` — Delete all cities
 
-### Composer Fixes (already applied)
+### Authentication
 
-- `roave/security-advisories` (dev-master) was removed from `require-dev` — it now blocks PHPUnit 6.x
-- `zfcampus/zf-deploy` was removed from `require-dev` — its transitive dependency `herrera-io/json` has been deleted from GitHub
-- `platform.php` is set to `7.2.34` in composer.json to constrain dependency resolution to PHP 7.2-compatible versions
-- Must use `--no-plugins --ignore-platform-req=composer-plugin-api` flags because `zend-component-installer` requires Composer plugin API v1
-
-### Running Lint
-
-```bash
-sudo docker exec geonames_apigility bash -c 'cd /var/www && vendor/bin/phpcs'
-```
-
-Pre-existing style violations exist; these are not regressions.
+Requests require `Authorization: Geonames <token>` header. Token `b17d8756cc299c0c897454ee4dd0e58` is configured in `data/token-config.php`.
 
 ### Running Tests
 
 ```bash
-sudo docker exec geonames_apigility bash -c 'cd /var/www && vendor/bin/phpunit'
+sudo docker exec geonames_app php artisan test
 ```
 
-- 2 of 4 tests pass (IndexController tests)
-- 2 integration tests (StatesApi) fail because the test config intentionally excludes `local.php` (MongoDB config). These are pre-existing failures.
+### Running Lint
 
-### API Authentication
+```bash
+sudo docker exec geonames_app ./vendor/bin/pint --test
+```
 
-Requests require `Authorization: Geonames <token>` header. The token `b17d8756cc299c0c897454ee4dd0e58` is configured in `data/token-config.php`.
+Auto-fix: `sudo docker exec geonames_app ./vendor/bin/pint`
 
-### Configuration
+### Key Files
 
-- Copy `config/autoload/doctrine-mongo-odm.local.php.dist` → `config/autoload/doctrine-mongo-odm.local.php` (done once during setup)
-- Copy `config/autoload/local.php.dist` → `config/autoload/local.php` (done once during setup)
-- MongoDB connects to `10.5.0.6:27017` (docker-compose network IP) with credentials `root`/`example`
+- `app/Models/State.php`, `app/Models/City.php` — MongoDB Eloquent models
+- `app/Http/Controllers/Api/` — REST controllers
+- `app/Http/Requests/` — Form request validation
+- `app/Http/Middleware/TokenAuthentication.php` — Token auth middleware
+- `routes/api.php` — API route definitions
+- `data/token-config.php` — API token configuration
+- `config/database.php` — MongoDB connection config
 
-### Docker Network
+### Docker
 
-Custom bridge network `10.5.0.0/16`:
-- apigility container: `10.5.0.5`
-- mongo container: `10.5.0.6`
+- `geonames_app` — PHP 8.4 + Apache + Laravel (port 8080)
+- `geonames_mongodb` — MongoDB (port 27017, user: root / password: example)
+- Custom bridge network `10.5.0.0/16`
